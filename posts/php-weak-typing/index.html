@@ -38,11 +38,14 @@
 <h2 id="字符串转换为数值">字符串转换为数值</h2>
 <p>由上图可以看出，当对两个字符串进行比较时，会『进行数字或词汇比较』。</p>
 <blockquote>
-<p>当一个字符串被当作一个数值来取值，其结果和类型如下：</p></blockquote>
+<p>当一个字符串被当作一个数值来取值，其结果和类型如下：</p>
+</blockquote>
 <blockquote>
-<p>如果该字符串没有包含 ‘.’，’e’ 或 ‘E’ 并且其数字值在整型的范围之内（由 PHP_INT_MAX 所定义），该字符串将被当成 integer 来取值。其它所有情况下都被作为 float 来取值。</p></blockquote>
+<p>如果该字符串没有包含 ‘.’，’e’ 或 ‘E’ 并且其数字值在整型的范围之内（由 PHP_INT_MAX 所定义），该字符串将被当成 integer 来取值。其它所有情况下都被作为 float 来取值。</p>
+</blockquote>
 <blockquote>
-<p>该字符串的开始部分决定了它的值。如果该字符串以合法的数值开始，则使用该数值。否则其值为 0（零）。合法数值由可选的正负号，后面跟着一个或多个数字（可能有小数点），再跟着可选的指数部分。指数部分由 ‘e’ 或 ‘E’ 后面跟着一个或多个数字构成。</p></blockquote>
+<p>该字符串的开始部分决定了它的值。如果该字符串以合法的数值开始，则使用该数值。否则其值为 0（零）。合法数值由可选的正负号，后面跟着一个或多个数字（可能有小数点），再跟着可选的指数部分。指数部分由 ‘e’ 或 ‘E’ 后面跟着一个或多个数字构成。</p>
+</blockquote>
 <p>再结合文档，可以得出：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">var_dump</span>(<span style="color:#e6db74">&#39;1024&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;1024.00&#39;</span>); <span style="color:#75715e">//bool(true)

@@ -36,11 +36,14 @@
 <h2 id="1-fd">1. fd</h2>
 <p>考察的是 Linux 文件描述符相关知识：</p>
 <blockquote>
-<p>fd == 0 为标准输入</p></blockquote>
+<p>fd == 0 为标准输入</p>
+</blockquote>
 <blockquote>
-<p>fd == 1 为标准输出</p></blockquote>
+<p>fd == 1 为标准输出</p>
+</blockquote>
 <blockquote>
-<p>fd == 2 为标准错误输出</p></blockquote>
+<p>fd == 2 为标准错误输出</p>
+</blockquote>
 <p>将 <code>argv[1]</code> 减去 4660，read(fd)，然后比较字符串：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; ~/p/1_fd ./fd <span style="color:#ae81ff">4660</span>
 </span></span><span style="display:flex;"><span>LETMEWIN

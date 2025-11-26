@@ -46,7 +46,8 @@
 <li>在非调试状态下，KiUserExceptionDispatcher() 调用 RtlDispatchException() 函数对线程的 S.E.H 链表进行遍历，如果找到能够处理异常的回调函数，将再次遍历先前调用过的 S.E.H 句柄，即 unwind 操作，以保证异常处理机制自身的完整性。</li>
 <li>如果栈中所有的 S.E.H 都失败了，且用户曾经使用过 SetUnhandledExceptionFilter() 函数设定进程处理异常，则这个异常处理将被调用。</li>
 <li>如果用户自定义的进程异常处理失败，或者用户根本没有定义进程异常处理，那么系统默认的异常处理 UnhandledExceptionFilter() 将会被调用。U.E.F 会根据注册表中相关信息决定是默默地关闭程序，还是弹出错误对话框。</li>
-</ul></blockquote>
+</ul>
+</blockquote>
 <h2 id="测试目标及测试环境">测试目标及测试环境</h2>
 <p>参考小马哥的文章，我也采用 AudioCoder 作为测试软件。</p>
 <ul>
