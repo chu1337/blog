@@ -35,7 +35,7 @@
     <p>WooYun Zone 里面发现的目标，全程打码。</p>
 <h2 id="资产信息收集">资产信息收集</h2>
 <p>拿到手的只有一个域名，首先对域名进行信息收集：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  ees  whois xx.oo
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  ees  whois xx.oo
 </span></span><span style="display:flex;"><span>Domain Name: xx.oo
 </span></span><span style="display:flex;"><span>ROID: 20021209s10041s00003662-cn
 </span></span><span style="display:flex;"><span>Domain Status: clientDeleteProhibited
@@ -125,7 +125,7 @@
 <li>爆破员工邮箱</li>
 </ul>
 <p>收集子域名及邮箱信息：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  ees  curl <span style="color:#e6db74">&#34;http://api.hackertarget.com/hostsearch/?q=xx.oo&#34;</span> -o api.hackertarget.com.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  ees  curl <span style="color:#e6db74">&#34;http://api.hackertarget.com/hostsearch/?q=xx.oo&#34;</span> -o api.hackertarget.com.txt
 </span></span><span style="display:flex;"><span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
 </span></span><span style="display:flex;"><span>                                 Dload  Upload   Total   Spent    Left  Speed
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">100</span>    <span style="color:#ae81ff">55</span>    <span style="color:#ae81ff">0</span>    <span style="color:#ae81ff">55</span>    <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">12</span>      <span style="color:#ae81ff">0</span> --:--:--  0:00:04 --:--:--    <span style="color:#ae81ff">12</span>
@@ -381,15 +381,15 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>^C
 </span></span></code></pre></div><p>一番努力后成功收集到一些子域名、IP 段及邮箱信息。整理IP 段为 ipList.txt，对其做 nmap 扫描：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  ees  sudo nmap -T4 -A -Pn -n --open -v -iL ipList.txt -oN nmap.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  ees  sudo nmap -T4 -A -Pn -n --open -v -iL ipList.txt -oN nmap.txt
 </span></span></code></pre></div><p>结果太长了，不贴了，扫描出一些 HTTP(s)、PPTP。对开放了 HTTP 服务的 IP 做域名反差，结合前面收集的域名，整理出一份 http.txt。抓取所有 HTTP 的 banner：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  WhatWeb git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> ./whatweb -v --no-errors -i ~/ees/http.txt --log-verbose ~/ees/whatweb.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  WhatWeb git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> ./whatweb -v --no-errors -i ~/ees/http.txt --log-verbose ~/ees/whatweb.txt
 </span></span><span style="display:flex;"><span>... snip ...
 </span></span><span style="display:flex;"><span>http://1.2.3.4/index.php/zh/ <span style="color:#f92672">[</span>200<span style="color:#f92672">]</span> Apache<span style="color:#f92672">[</span>2.4.10<span style="color:#f92672">]</span>, Cookies<span style="color:#f92672">[</span>08df4e0509a4d4d0ea77bf5bdf8eeb67,1f7b7cefd2db98102889d031f83522f5<span style="color:#f92672">]</span>, Country<span style="color:#f92672">[</span>CHINA<span style="color:#f92672">][</span>CN<span style="color:#f92672">]</span>, HTML5, HTTPServer<span style="color:#f92672">[</span>Windows <span style="color:#f92672">(</span><span style="color:#ae81ff">32</span> bit<span style="color:#f92672">)][</span>Apache/2.4.10 <span style="color:#f92672">(</span>Win32<span style="color:#f92672">)</span> OpenSSL/1.0.1i PHP/5.5.19<span style="color:#f92672">]</span>, HttpOnly<span style="color:#f92672">[</span>1f7b7cefd2db98102889d031f83522f5<span style="color:#f92672">]</span>, IP<span style="color:#f92672">[</span>1.2.3.4<span style="color:#f92672">]</span>, JQuery, maybe Joomla, MetaGenerator<span style="color:#f92672">[</span>Joomla! - Open Source Content Management<span style="color:#f92672">]</span>, Modernizr, OpenSSL<span style="color:#f92672">[</span>1.0.1i<span style="color:#f92672">]</span>, OpenSearch<span style="color:#f92672">[</span>http://1.2.3.4/index.php/zh/component/search/?Itemid<span style="color:#f92672">=</span>642&amp;amp;format<span style="color:#f92672">=</span>opensearch<span style="color:#f92672">]</span>, PHP<span style="color:#f92672">[</span>5.5.19<span style="color:#f92672">]</span>, PasswordField<span style="color:#f92672">[</span>password<span style="color:#f92672">]</span>, Script<span style="color:#f92672">[</span>text/javascript<span style="color:#f92672">]</span>, Title<span style="color:#f92672">[</span>上海xxoo有限责任公司<span style="color:#f92672">]</span>, X-Powered-By<span style="color:#f92672">[</span>PHP/5.5.19<span style="color:#f92672">]</span>
 </span></span></code></pre></div><p>识别出主站 CMS 为 Joomla。</p>
 <h2 id="漏洞利用突破边界">漏洞利用、突破边界</h2>
 <p>joomla 前一段出过个 RCE，当时和糖果师傅还一起测试了，搜索漏洞库：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  exploit-database git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> ./searchsploit joomla
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  exploit-database git:<span style="color:#f92672">(</span>master<span style="color:#f92672">)</span> ./searchsploit joomla
 </span></span><span style="display:flex;"><span>...snip...
 </span></span><span style="display:flex;"><span>Joomla 1.5 - 3.4.5 - Object Injection Remote Command Execution                                                                                                                                     | ./php/webapps/38977.py
 </span></span><span style="display:flex;"><span>Joomla! Almond Classifieds Component Arbitrary File Upload Vulnerability                                                                                                                           | ./php/webapps/39016.txt
@@ -400,7 +400,7 @@
 </span></span><span style="display:flex;"><span>Joomla! Spider Video Player Extension <span style="color:#e6db74">&#39;theme&#39;</span> Parameter SQL Injection Vulnerability                                                                                                                | ./php/webapps/39294.txt
 </span></span><span style="display:flex;"><span>--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------------------------
 </span></span></code></pre></div><p>成功通过公开的 EXP 拿下网站权限，ipconfig 发现是内网：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>meterpreter &gt; ifconfig
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>meterpreter &gt; ifconfig
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Interface  1
 </span></span><span style="display:flex;"><span><span style="color:#f92672">============</span>

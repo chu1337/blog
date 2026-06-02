@@ -36,30 +36,30 @@
 <h3 id="信息收集">信息收集</h3>
 <p>独立 VPS，无 CDN，IP：59.188.255.228，linux 操作系统。nmap 扫描端口，发现开放 22，80，3306 端口。</p>
 <table>
-  <thead>
-      <tr>
-          <th>端口</th>
-          <th>信息</th>
-          <th>利用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>22</td>
-          <td>ssh</td>
-          <td>可尝试暴力破解</td>
-      </tr>
-      <tr>
-          <td>80</td>
-          <td>nginx, php, emlog</td>
-          <td>挖掘 emlog 漏洞</td>
-      </tr>
-      <tr>
-          <td>3306</td>
-          <td>mysql</td>
-          <td>可尝试暴力破解</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>端口</th>
+					<th>信息</th>
+					<th>利用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>22</td>
+					<td>ssh</td>
+					<td>可尝试暴力破解</td>
+			</tr>
+			<tr>
+					<td>80</td>
+					<td>nginx, php, emlog</td>
+					<td>挖掘 emlog 漏洞</td>
+			</tr>
+			<tr>
+					<td>3306</td>
+					<td>mysql</td>
+					<td>可尝试暴力破解</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="漏洞挖掘">漏洞挖掘</h3>
 <p>从 web 入手，挖掘到 emlog 博客程序后台添加管理员处无 token 认证，存在 CSRF 漏洞。当服务器支持 zip 解压时，后台可通过上传插件或主题 getshell。</p>
@@ -68,48 +68,48 @@
 <h3 id="权限提升">权限提升</h3>
 <p>linux，ubuntu 12.04，且 php 禁用了执行命令的危险函数，放弃溢出提权。 服务器上收集到的信息:</p>
 <table>
-  <thead>
-      <tr>
-          <th>类型</th>
-          <th>用户名</th>
-          <th>密码</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>mysql</td>
-          <td>root</td>
-          <td>mysqlroot**</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>用户名</th>
+					<th>密码</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>mysql</td>
+					<td>root</td>
+					<td>mysqlroot**</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="后门">后门</h3>
 <p>向网站目录传入一免杀木马，保留 webshell 以便以后进一步渗透。同时，通过在 emlog 后台登录页面插入 js 脚本，劫持登录表单，成功截取到后台管理的密码:</p>
 <table>
-  <thead>
-      <tr>
-          <th>类型</th>
-          <th>用户名</th>
-          <th>密码</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>mysql</td>
-          <td>root</td>
-          <td>mysqlroot**</td>
-      </tr>
-      <tr>
-          <td>emlog</td>
-          <td>bug1024</td>
-          <td>worm**</td>
-      </tr>
-      <tr>
-          <td>截获到密码尝试登录</td>
-          <td>ssh 时再次失败。</td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>用户名</th>
+					<th>密码</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>mysql</td>
+					<td>root</td>
+					<td>mysqlroot**</td>
+			</tr>
+			<tr>
+					<td>emlog</td>
+					<td>bug1024</td>
+					<td>worm**</td>
+			</tr>
+			<tr>
+					<td>截获到密码尝试登录</td>
+					<td>ssh 时再次失败。</td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="日志清理">日志清理</h3>
 <p>删除上传的主题包，删除 js 脚本，将改动过的文件时间修改至与其他文件时间一致。</p>
@@ -120,30 +120,30 @@
 <h3 id="信息收集-1">信息收集</h3>
 <p>独立 VPS，无 CDN，IP：23.245.26.25，linux 操作系统。nmap 扫描发现端口，发现开放22，80，3306 端口。</p>
 <table>
-  <thead>
-      <tr>
-          <th>端口</th>
-          <th>信息</th>
-          <th>利用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>22</td>
-          <td>ssh</td>
-          <td>可尝试暴力破解</td>
-      </tr>
-      <tr>
-          <td>80</td>
-          <td>nginx, php, typecho</td>
-          <td>挖掘 typecho 漏洞</td>
-      </tr>
-      <tr>
-          <td>3306</td>
-          <td>mysql</td>
-          <td>可尝试暴力破解</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>端口</th>
+					<th>信息</th>
+					<th>利用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>22</td>
+					<td>ssh</td>
+					<td>可尝试暴力破解</td>
+			</tr>
+			<tr>
+					<td>80</td>
+					<td>nginx, php, typecho</td>
+					<td>挖掘 typecho 漏洞</td>
+			</tr>
+			<tr>
+					<td>3306</td>
+					<td>mysql</td>
+					<td>可尝试暴力破解</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="漏洞挖掘-1">漏洞挖掘</h3>
 <p>依旧从 web 入手，挖掘到 typecho 后台添加管理处无 token 认证，存在 CSRF 漏洞。 typecho 后台上传可添加 php 文件类型，直接上传木马 getshell。</p>
@@ -153,20 +153,20 @@
 <p>linux 系统目录权限做的很好，且 php 禁用了危险的函数，导致无法执行命令，放弃 exp 提权。</p>
 <p>服务器上收集到的信息:</p>
 <table>
-  <thead>
-      <tr>
-          <th>类型</th>
-          <th>用户名</th>
-          <th>密码</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>mysql</td>
-          <td>evilsay</td>
-          <td>#evilsa**</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>用户名</th>
+					<th>密码</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>mysql</td>
+					<td>evilsay</td>
+					<td>#evilsa**</td>
+			</tr>
+	</tbody>
 </table>
 <p>用收集到的 mysql 密码，进一步组合登录 ssh 失败。</p>
 <h3 id="意外">意外</h3>
@@ -175,25 +175,25 @@
 <h3 id="后门-1">后门</h3>
 <p>网站目录传入免杀木马，留 webshell 以便以后进一步渗透。同时采用相同的方式劫持后台登录框，成功截取到后台登录密码:</p>
 <table>
-  <thead>
-      <tr>
-          <th>类型</th>
-          <th>用户名</th>
-          <th>密码</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>mysql</td>
-          <td>evilsay</td>
-          <td>#evilsa**</td>
-      </tr>
-      <tr>
-          <td>typecho</td>
-          <td>evi1m0</td>
-          <td>evi1m0**</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>用户名</th>
+					<th>密码</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>mysql</td>
+					<td>evilsay</td>
+					<td>#evilsa**</td>
+			</tr>
+			<tr>
+					<td>typecho</td>
+					<td>evi1m0</td>
+					<td>evi1m0**</td>
+			</tr>
+	</tbody>
 </table>
 <p>截获到密码尝试登录 ssh 时再次失败。</p>
 <h3 id="日志清理-1">日志清理</h3>

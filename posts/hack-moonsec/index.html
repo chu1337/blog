@@ -36,50 +36,50 @@
 <h2 id="信息收集">信息收集</h2>
 <p>独立 VPS，无 CDN，IP：8.8.8.8，Windows 2003 操作系统。nmap 扫描端口，发现开放 80，135，999，1025，1026，3306，3389 端口。</p>
 <table>
-  <thead>
-      <tr>
-          <th>端口</th>
-          <th>信息</th>
-          <th>利用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>80</td>
-          <td>IIS 6, emlog</td>
-          <td>脚本入侵，利用 emlog 漏洞</td>
-      </tr>
-      <tr>
-          <td>135</td>
-          <td>MSRPC</td>
-          <td></td>
-      </tr>
-      <tr>
-          <td>999</td>
-          <td>IIS</td>
-          <td></td>
-      </tr>
-      <tr>
-          <td>1025</td>
-          <td>MSRPC</td>
-          <td></td>
-      </tr>
-      <tr>
-          <td>1025</td>
-          <td>MSRPC</td>
-          <td></td>
-      </tr>
-      <tr>
-          <td>3306</td>
-          <td>MySQL，无法外连</td>
-          <td>提权时可考虑</td>
-      </tr>
-      <tr>
-          <td>3389</td>
-          <td>MS-WBT-SERVER</td>
-          <td>暴力破解3389 密码</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>端口</th>
+					<th>信息</th>
+					<th>利用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>80</td>
+					<td>IIS 6, emlog</td>
+					<td>脚本入侵，利用 emlog 漏洞</td>
+			</tr>
+			<tr>
+					<td>135</td>
+					<td>MSRPC</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>999</td>
+					<td>IIS</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>1025</td>
+					<td>MSRPC</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>1025</td>
+					<td>MSRPC</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>3306</td>
+					<td>MySQL，无法外连</td>
+					<td>提权时可考虑</td>
+			</tr>
+			<tr>
+					<td>3389</td>
+					<td>MS-WBT-SERVER</td>
+					<td>暴力破解3389 密码</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="漏洞挖掘">漏洞挖掘</h2>
 <p>从 web 入手，emlog 博客程序后台添加管理处无 token 认证，即存在 CSRF 漏洞。当服务器支持 zip 解压时，后台可通过上传插件活主题 getshell；服务器不支持 zip 解压时，可以考虑审计插件 getshell。</p>
@@ -87,7 +87,7 @@
 <p>利用 Phithon 编写的 emlog exp。编写 CSRF 页面，传到肉鸡服务器上，通过评论插入链接诱使黑客访问。</p>
 <p>数日后，黑客登录后台，访问链接成功添加管理。</p>
 <p>利用新添加的管理登录后台，试图通过上传主题 getshell，却发现服务器不支持 zip 解压，于是改变方向对插件进行审计。博客安装了个邮件通知插件，审计挖掘到一枚文件写入漏洞:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">plugin_setting</span>(){
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">plugin_setting</span>(){
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">require</span> (<span style="color:#a6e22e">EMLOG_ROOT</span> <span style="color:#f92672">.</span> <span style="color:#e6db74">&#39;/content/plugins/commentNotice/commentNotice_config.php&#39;</span>);
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">foreach</span> (<span style="color:#a6e22e">explode</span>(<span style="color:#e6db74">&#34;,&#34;</span>,$_POST[<span style="color:#e6db74">&#39;exclude&#39;</span>]) <span style="color:#66d9ef">as</span> $exclude){
 </span></span><span style="display:flex;"><span>                $excludes <span style="color:#f92672">=</span> $excludes<span style="color:#f92672">.</span><span style="color:#e6db74">&#39;&#34;&#39;</span><span style="color:#f92672">.</span>$exclude<span style="color:#f92672">.</span><span style="color:#e6db74">&#39;&#34;&#39;</span><span style="color:#f92672">.</span><span style="color:#e6db74">&#34;,&#34;</span>;

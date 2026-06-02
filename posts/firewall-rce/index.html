@@ -55,7 +55,7 @@
 <p><img src="8.webp" alt=""></p>
 <p>但问题是这个执行的命令不能自定义参数，只提供了 file 即保存的文件名一个参数，也就是说实际上执行的命令是 <code>cowsay /tmp/1</code>。那如何利用这个参数去执行自定义的命令呢？我想到的一个办法是「执行可以执行命令的程序」。</p>
 <p>说起来比较绕，举个栗子：vi、ftp 等，以 vi 为例，执行如下命令：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tcpdump -n -i eth0 -G1 wrfile -z vi
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tcpdump -n -i eth0 -G1 wrfile -z vi
 </span></span></code></pre></div><p>然后在 vi 中执行命令或读写文件：</p>
 <p>读写文件：<code>e /etc/passwd</code></p>
 <p><img src="9.jpeg" alt=""></p>

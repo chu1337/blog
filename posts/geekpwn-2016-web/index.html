@@ -33,14 +33,14 @@
 
     <section>
     <p>代码审计题目，代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">error_reporting</span>(<span style="color:#ae81ff">0</span>);
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;view-source&#39;</span>])) {
 </span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">show_source</span>(<span style="color:#66d9ef">__FILE__</span>);
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">exit</span>();
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">include</span>(<span style="color:#e6db74">&#34;./inc.php&#34;</span>); <span style="color:#75715e">// Database Connected
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">nojam_firewall</span>(){
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">nojam_firewall</span>(){
 </span></span><span style="display:flex;"><span>    $INFO <span style="color:#f92672">=</span> <span style="color:#a6e22e">parse_url</span>($_SERVER[<span style="color:#e6db74">&#39;REQUEST_URI&#39;</span>]);
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">parse_str</span>($INFO[<span style="color:#e6db74">&#39;query&#39;</span>], $query);
 </span></span><span style="display:flex;"><span>    $filter <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;union&#34;</span>, <span style="color:#e6db74">&#34;select&#34;</span>, <span style="color:#e6db74">&#34;information_schema&#34;</span>, <span style="color:#e6db74">&#34;from&#34;</span>];
@@ -148,7 +148,7 @@
 </code></pre><p>但是在第 12-24 行可以看到有一防注入函数，想要更好出数据肯定要绕过防注入。函数是通过 <code>parse_url</code>、<code>parse_str</code> 解析 url 参数，然后通过正则限制关键字的方式做的过滤，常规的方法绕过相对困难。</p>
 <p>这里用到了 <code>parse_url</code> 函数在解析 url 时存在的 bug，通过：<code>///x.php?key=value</code> 的方式可以使其返回 <code>false</code>。</p>
 <p>具体可以看 <a href="https://github.com/php/php-src/blob/9df6112e01eacb6e068e8d23e78181918bdab548/ext/standard/url.c#L97">源码</a>，关键代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>PHPAPI php_url <span style="color:#f92672">*</span><span style="color:#a6e22e">php_url_parse_ex</span>(<span style="color:#66d9ef">char</span> <span style="color:#66d9ef">const</span> <span style="color:#f92672">*</span>str, <span style="color:#66d9ef">size_t</span> length)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>PHPAPI php_url <span style="color:#f92672">*</span><span style="color:#a6e22e">php_url_parse_ex</span>(<span style="color:#66d9ef">char</span> <span style="color:#66d9ef">const</span> <span style="color:#f92672">*</span>str, <span style="color:#66d9ef">size_t</span> length)
 </span></span><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> port_buf[<span style="color:#ae81ff">6</span>];
 </span></span><span style="display:flex;"><span>    php_url <span style="color:#f92672">*</span>ret <span style="color:#f92672">=</span> <span style="color:#a6e22e">ecalloc</span>(<span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">sizeof</span>(php_url));
@@ -175,7 +175,7 @@
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> NULL;
 </span></span></code></pre></div><p>可以看到，在函数 <code>parse_url</code> 内部，如果 url 是以 <code>//</code> 开始，就认为它是相对 url，而后认为 url 的部件从 <code>url+2</code> 开始。第 281 行，若 <code>p-s &lt; 1</code>，也就是如果 url 为 <code>///x.php</code>，则 <code>p = e = s = s + 2</code>，函数将返回 <code>NULL</code>。</p>
 <p>再看 <code>PHP_FUNCTION</code>，第 351 行：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">/* {{{ proto mixed parse_url(string url, [int url_component])
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">/* {{{ proto mixed parse_url(string url, [int url_component])
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">   Parse a URL and return its components */</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">PHP_FUNCTION</span>(parse_url)
 </span></span><span style="display:flex;"><span>{
@@ -193,7 +193,7 @@
 </span></span><span style="display:flex;"><span>    }
 </span></span></code></pre></div><p>若 <code>php_url_parse_ex</code> 结果为 <code>NULL</code>，函数 <code>parse_url</code> 将返回 <code>false</code>。</p>
 <p>测试如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜ ~ uname -a
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜ ~ uname -a
 </span></span><span style="display:flex;"><span>Linux kali 4.7.0-kali1-amd64 <span style="color:#75715e">#1 SMP Debian 4.7.8-1kali1 (2016-10-24) x86_64 GNU/Linux</span>
 </span></span><span style="display:flex;"><span>➜ ~ php -v
 </span></span><span style="display:flex;"><span>PHP 7.0.12-1 <span style="color:#f92672">(</span>cli<span style="color:#f92672">)</span> <span style="color:#f92672">(</span> NTS <span style="color:#f92672">)</span>

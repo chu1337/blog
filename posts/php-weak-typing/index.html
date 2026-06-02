@@ -47,12 +47,12 @@
 <p>该字符串的开始部分决定了它的值。如果该字符串以合法的数值开始，则使用该数值。否则其值为 0（零）。合法数值由可选的正负号，后面跟着一个或多个数字（可能有小数点），再跟着可选的指数部分。指数部分由 ‘e’ 或 ‘E’ 后面跟着一个或多个数字构成。</p>
 </blockquote>
 <p>再结合文档，可以得出：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">var_dump</span>(<span style="color:#e6db74">&#39;1024&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;1024.00&#39;</span>); <span style="color:#75715e">//bool(true)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
 </span></span></span></code></pre></div><h2 id="实践">实践</h2>
 <p>微博上看到安全宝发起的 <a href="http://yuebaomei.com/">yuebaomei</a>，最终关中代码审计运用到了以上 TIP。漏洞代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#f92672">&lt;?</span><span style="color:#a6e22e">php</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>$flag <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;THIS IS FLAG&#34;</span>;
 </span></span><span style="display:flex;"><span>
@@ -93,7 +93,7 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">?&gt;</span><span style="color:#960050;background-color:#1e0010">
 </span></span></span></code></pre></div><p>上面的部分是一些对密码强度的验证，读懂代码后可以简单通过。最后的验证在于：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#34;42&#34;</span> <span style="color:#f92672">==</span> $password) <span style="color:#66d9ef">echo</span> $flag;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#e6db74">&#34;42&#34;</span> <span style="color:#f92672">==</span> $password) <span style="color:#66d9ef">echo</span> $flag;
 </span></span></code></pre></div><p>依照上述思路，令 $password 为 420000000.0e-7 便可通过验证，得到 flag。</p>
 <h2 id="references--recommendation">References &amp; Recommendation</h2>
 <ul>

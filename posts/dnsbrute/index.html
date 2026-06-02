@@ -32,7 +32,7 @@
     </header>
 
     <section>
-    <p><a href="https://github.com/Q2h1Cg/dnsbrute">GitHub</a></p>
+    <p><a href="https://github.com/chu1337/dnsbrute">GitHub</a></p>
 <p>子域名爆破往往是渗透测试的第一步，是收集 IP 信息、脆弱点的前置条件。</p>
 <p>之前测试了目前社区中的子域名爆破软件，都不是很满意，主要问题可归结为：</p>
 <ul>
@@ -44,7 +44,7 @@
 <li>速度慢</li>
 </ol>
 <p>DNS 协议简单，查询流程简单，大部分语言库中也都有 DNS 查询相关的函数。而子域名爆破实际就是对每个子域名进行 DNS 查询，若存在相应解析记录则证明该子域名存在。伪代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;dict.txt&#34;</span>) <span style="color:#66d9ef">as</span> fd:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;dict.txt&#34;</span>) <span style="color:#66d9ef">as</span> fd:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> fd:
 </span></span><span style="display:flex;"><span>        subdomain <span style="color:#f92672">=</span> line<span style="color:#f92672">.</span>strip() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;.&#34;</span> <span style="color:#f92672">+</span> domain
 </span></span><span style="display:flex;"><span>        client <span style="color:#f92672">=</span> dns<span style="color:#f92672">.</span>client(dns_server_addr)
@@ -57,7 +57,7 @@
 <li>每次查询都是基于一个完整的 socket 连接，处理连接、等待 IO 造成了大量不必要的时间、性能开销。</li>
 </ul>
 <p>解决办法参考了 masscan/zmap 的无状态思路：对于每个 DNS socket 连接，开启两个协程：一个协程负责发送，另一个负责接收。伪代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>client <span style="color:#f92672">=</span> dns<span style="color:#f92672">.</span>client(dns_server_addr)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>client <span style="color:#f92672">=</span> dns<span style="color:#f92672">.</span>client(dns_server_addr)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>go func(){
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;dict.txt&#34;</span>) <span style="color:#66d9ef">as</span> fd:
@@ -82,7 +82,7 @@
 <p>泛解析一直都是域名爆破中的大问题，目前的解决思路是根据确切不存在的子域名记录（md5(domain).domain）获取黑名单 IP，对爆破过程的结果进行黑名单过滤。</p>
 <p>但这种宽泛的过滤很容易导致漏报，如泛解析记录为 1.1.1.1，但某存在子域名也指向 1.1.1.1，此时这个子域名便可能会被黑名单过滤掉。</p>
 <p>胖学弟提到，可以将 TTL 也作为黑名单规则的一部分，评判的依据是：在权威 DNS 中，泛解析记录的 TTL 肯定是相同的，如果子域名记录相同，但 TTL 不同，那这条记录可以说肯定不是泛解析记录。最终的判断代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// IsPanDNSRecord 是否为泛解析记录</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// IsPanDNSRecord 是否为泛解析记录</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">IsPanDNSRecord</span>(<span style="color:#a6e22e">record</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">ttl</span> <span style="color:#66d9ef">uint32</span>) <span style="color:#66d9ef">bool</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_ttl</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">panDNSRecords</span>[<span style="color:#a6e22e">TrimSuffixPoint</span>(<span style="color:#a6e22e">record</span>)]
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 若记录不存在于黑名单列表，不是泛解析</span>

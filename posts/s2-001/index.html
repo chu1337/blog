@@ -33,7 +33,7 @@
 
     <section>
     <p>应用中的认证函数添加错误：<code>ActionSupport.addFieldError</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">validate</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">validate</span>() {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (username <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> username.<span style="color:#a6e22e">trim</span>().<span style="color:#a6e22e">equals</span>(<span style="color:#e6db74">&#34;&#34;</span>)) {
 </span></span><span style="display:flex;"><span>        addFieldError(<span style="color:#e6db74">&#34;username&#34;</span>, <span style="color:#e6db74">&#34;UserName is required&#34;</span>);
 </span></span><span style="display:flex;"><span>    }
@@ -42,7 +42,7 @@
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>判断是否验证失败：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// xwork-2.0.1.jar!/com/opensymphony/xwork2/interceptor/DefaultWorkflowInterceptor.class</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// xwork-2.0.1.jar!/com/opensymphony/xwork2/interceptor/DefaultWorkflowInterceptor.class</span>
 </span></span><span style="display:flex;"><span>... snip ...
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// 是否验证失败</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(validationAwareAction1.<span style="color:#a6e22e">hasErrors</span>()) {
@@ -53,7 +53,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">inputResultName</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>经过过滤器后进入到页面渲染，由外至内解析标签（form=&gt;textfield=&gt;submit）：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// struts2-core-2.0.6.jar!/org/apache/struts2/views/jsp/ComponentTagSupport.class</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// struts2-core-2.0.6.jar!/org/apache/struts2/views/jsp/ComponentTagSupport.class</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">doEndTag</span>() <span style="color:#66d9ef">throws</span> JspException {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">end</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">pageContext</span>.<span style="color:#a6e22e">getOut</span>(), <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getBody</span>());
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">component</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
@@ -69,7 +69,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> evalBody<span style="color:#f92672">?</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">component</span>.<span style="color:#a6e22e">usesBody</span>()<span style="color:#f92672">?</span>2:1):0;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>首先执行 <code>doStartTag</code>，标签闭合时执行 <code>doEndTag</code>，调试发现经过 <code>doEndTag</code> 后 Payload 得以执行，跟进之，随后跟进至 <code>component.end</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// struts2-core-2.0.6.jar!/org/apache/struts2/components/UIBean.class</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// struts2-core-2.0.6.jar!/org/apache/struts2/components/UIBean.class</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">end</span>(Writer writer, String body) {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">evaluateParams</span>();	<span style="color:#75715e">// 遍历标签属性</span>
 </span></span><span style="display:flex;"><span>
@@ -85,7 +85,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>跟进 <code>evaluateParams</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">evaluateParams</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">evaluateParams</span>() {
 </span></span><span style="display:flex;"><span>    ... snip ...
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">name</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
 </span></span><span style="display:flex;"><span>        name <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">findString</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">name</span>);  <span style="color:#75715e">// 查询标签 name</span>
@@ -119,7 +119,7 @@
 </span></span><span style="display:flex;"><span>... snip ...
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>跟进 <code>findValue</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// struts2-core-2.0.6.jar!/org/apache/struts2/components/Component.class</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// struts2-core-2.0.6.jar!/org/apache/struts2/components/Component.class</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> Object <span style="color:#a6e22e">findValue</span>(String expr, Class toType) {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">altSyntax</span>() <span style="color:#f92672">&amp;&amp;</span> toType <span style="color:#f92672">==</span> String.<span style="color:#a6e22e">class</span>) {    <span style="color:#75715e">// 若开启 altSyntax 进入 TextParseUtil.translateVariables，</span>
 </span></span><span style="display:flex;"><span>                                                        <span style="color:#75715e">// 对表达式进行解析</span>
@@ -133,7 +133,7 @@
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>继续跟进 <code>TextParseUtil.translateVariables</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// xwork-2.0.1.jar!/com/opensymphony/xwork2/util/TextParseUtil.class</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// xwork-2.0.1.jar!/com/opensymphony/xwork2/util/TextParseUtil.class</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Object <span style="color:#a6e22e">translateVariables</span>(<span style="color:#66d9ef">char</span> open, String expression, ValueStack stack, Class asType, TextParseUtil.<span style="color:#a6e22e">ParsedValueEvaluator</span> evaluator) {
 </span></span><span style="display:flex;"><span>    Object result <span style="color:#f92672">=</span> expression; <span style="color:#75715e">// 表达式，%{name}</span>
 </span></span><span style="display:flex;"><span>

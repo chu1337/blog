@@ -37,7 +37,7 @@
 <p>在输入操作下标时没有检测是否越界，通过数组越界读获取获取伪造的函数指针执行 shellcode。</p>
 <p><img src="ichunqiu-1.png" alt=""></p>
 <p><img src="ichunqiu-2.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># io = process(&#34;./tc1&#34;)</span>
 </span></span><span style="display:flex;"><span>io <span style="color:#f92672">=</span> remote(<span style="color:#e6db74">&#34;106.75.9.11&#34;</span>, <span style="color:#ae81ff">20000</span>)
@@ -54,7 +54,7 @@
 <p><img src="ichunqiu-3.png" alt=""></p>
 <p><img src="ichunqiu-4.png" alt=""></p>
 <p><img src="ichunqiu-5.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># io = process(&#34;./echo-200&#34;)</span>
 </span></span><span style="display:flex;"><span>io <span style="color:#f92672">=</span> remote(<span style="color:#e6db74">&#34;106.75.9.11&#34;</span>, <span style="color:#ae81ff">20001</span>)
@@ -98,7 +98,7 @@
 </span></span><span style="display:flex;"><span>io<span style="color:#f92672">.</span>interactive()
 </span></span></code></pre></div><h2 id="pwn3">Pwn3</h2>
 <p>栈溢出，考点可能是 x64 ROP？机器是 CentOS 的，libc database 中没有找到相应的 libc，直接用的 pwntools 的 leak 泄露出 system 的偏移地址。其实这个完全可以不用泄露的，需要的技术是 return to dl_resolve，可是我还不懂，这两天要去学习下：）</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>leak<span style="color:#f92672">.</span>py
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>leak<span style="color:#f92672">.</span>py
 </span></span><span style="display:flex;"><span><span style="color:#f92672">----------</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
 </span></span><span style="display:flex;"><span>
@@ -190,7 +190,7 @@
 <p>就是个一字节的 leak，这道题我觉得难度还不如 Pwn1…</p>
 <p><img src="ichunqiu-6.png" alt=""></p>
 <p>name2 的 buf 空间为 40 字节，scanf 也是读入了 40 字节，也就是说可以去掉尾部的 “\00”，然后 name2 下方相邻的是 flag 的每一个字节，所以每次可以泄露一字节出来。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sys <span style="color:#f92672">import</span> argv
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sys <span style="color:#f92672">import</span> argv
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
 </span></span><span style="display:flex;"><span>

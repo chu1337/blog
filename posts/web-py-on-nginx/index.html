@@ -67,7 +67,7 @@
         access_log  /home/wwwlogs/web.py.log  access;
     }
 </code></pre><h2 id="spawn-fcgi">Spawn-fcgi</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@localhost:~# cat startSpawn
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@localhost:~# cat startSpawn
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
 </span></span><span style="display:flex;"><span>spawn-fcgi -d /home/wwwroot/web.py/ -f /home/wwwroot/web.py/main.py  -s /tmp/pyweb.sock -u www -g www
 </span></span><span style="display:flex;"><span>
@@ -75,7 +75,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
 </span></span><span style="display:flex;"><span>kill <span style="color:#e6db74">`</span>pgrep -f <span style="color:#e6db74">&#34;python /home/wwwroot/web.py/main.py&#34;</span><span style="color:#e6db74">`</span>
 </span></span></code></pre></div><h2 id="hello-world">Hello, world!</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/env python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/env python</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># -*- coding: utf-8 -*-</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> web
 </span></span><span style="display:flex;"><span>
@@ -89,7 +89,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
 </span></span><span style="display:flex;"><span>    web<span style="color:#f92672">.</span>wsgi<span style="color:#f92672">.</span>runwsgi <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> func, addr<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>: web<span style="color:#f92672">.</span>wsgi<span style="color:#f92672">.</span>runfcgi(func, addr) <span style="color:#75715e">#此行必须有</span>
 </span></span><span style="display:flex;"><span>    app<span style="color:#f92672">.</span>run()
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@localhost:~# ./lnmp start
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>root@localhost:~# ./lnmp start
 </span></span><span style="display:flex;"><span><span style="color:#f92672">=========================================================================</span>
 </span></span><span style="display:flex;"><span>Manager <span style="color:#66d9ef">for</span> LNMP V1.1  ,  Written by Licess
 </span></span><span style="display:flex;"><span><span style="color:#f92672">=========================================================================</span>

